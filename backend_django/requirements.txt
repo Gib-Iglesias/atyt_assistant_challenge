@@ -1,0 +1,9 @@
+Django==5.1.4
+dj-database-url==2.3.0
+PyJWT==2.10.1
+whitenoise==6.8.2
+# generacion e ingesta de PDF (bloque siguiente)
+reportlab==4.2.5
+pypdf==5.1.0
+# para migrar a Postgres solo hace falta descomentar y cambiar DATABASE_URL
+# psycopg[binary]==3.2.3
