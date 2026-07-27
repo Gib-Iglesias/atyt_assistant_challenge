@@ -1,4 +1,4 @@
-# att_assistant_challenge
+# atyt_assistant_challenge
 
 Asistente de chat interno para equipos de soporte. Responde preguntas sobre la
 documentación de producto **citando la fuente exacta** (documento y página),
@@ -12,16 +12,17 @@ infraestructura externa.
 
 ## Arranque
 
-Requisitos: **Docker y Docker Compose. Nada más. Sin API key.**
+Requisitos: **Docker y Docker Compose.**
+Comandos a ejecutar para levantar:
 
 ```bash
-git clone https://github.com/Gib-Iglesias/att_assistant_challenge.git
+git clone https://github.com/Gib-Iglesias/atyt_assistant_challenge.git
 cd atyt_assistant_challenge
 cp .env.example .env
 docker compose up --build
 ```
 
-Ese es el comando. El `.env.example` ya trae valores que funcionan tal cual: el
+El `.env.example` ya trae valores que funcionan tal cual: el
 proveedor de LLM por defecto es una implementación falsa que no necesita red ni
 credenciales.
 
@@ -35,7 +36,7 @@ idempotente.
 Volumen que se genera: 40 tenants, ~4.000 pedidos, ~470 tickets, 122 documentos
 (1.240 páginas) y unos 7.300 fragmentos indexados.
 
-Cuando termine, en los logs aparece `atyt-assistant listo`.
+Cuando termina, en los logs aparece `atyt-assistant listo`.
 
 | Servicio | URL | Para qué |
 |---|---|---|
@@ -107,3 +108,12 @@ pedidos pero documentos cortos, y baja el arranque a menos de 30 segundos.
 
 ---
 
+## Qué hay dentro
+
+| Servicio | Contenedor | Responsabilidad |
+|---|---|---|
+| Django | `django` | Modelo de datos, admin, migraciones, seed, ingesta. Fuente de verdad. |
+| FastAPI | `api` | Orquestación RAG, streaming SSE, herramientas de datos, acceso al LLM. |
+| React + nginx | `web` | Interfaz de chat y proxy inverso hacia los otros dos. |
+
+Comparten un volumen con la base SQLite en modo WAL. **Sólo Django ejecuta migraciones**

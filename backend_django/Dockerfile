@@ -26,4 +26,4 @@ RUN useradd --uid 1000 --create-home app \
 USER app
 
 EXPOSE 8000
-ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["sh", "/app/entrypoint.sh"]

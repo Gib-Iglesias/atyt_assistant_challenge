@@ -122,6 +122,6 @@ class ConversationAdmin(admin.ModelAdmin):
     list_select_related = ("tenant", "user")
 
 
-admin.site.site_header = "att_assistant_challenge"
-admin.site.site_title = "att_assistant"
+admin.site.site_header = "atyt_assistant_challenge"
+admin.site.site_title = "atyt_assistant"
 admin.site.index_title = "Operaciones y base de conocimiento"

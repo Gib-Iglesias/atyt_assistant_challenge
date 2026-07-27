@@ -1,23 +1,27 @@
-name: att-assistant
+# Compatible con docker-compose v1 (guion) y docker compose v2 (espacio).
+# El arranque ordenado NO depende de condiciones de healthcheck (que v1 no
+# soporta igual): cada servicio espera por su cuenta. El entrypoint de 'api'
+# aguarda a que Django cree /data/.ready antes de arrancar, y nginx reintenta
+# solo hacia los backends. Asi el orden se respeta en las dos versiones.
+
+version: "3.8"
 
 services:
+  # Fuente de verdad: esquema, admin, seed e ingesta.
+  # UNICO servicio que ejecuta migraciones. Al terminar crea /data/.ready.
   django:
     build: ./backend_django
     env_file: .env
-    environment:
-      DJANGO_SERVICE: "1"
     volumes:
       - appdata:/data
     ports:
       - "8000:8000"
-    healthcheck:
-      test: ["CMD-SHELL", "test -f /data/.ready"]
-      interval: 5s
-      timeout: 3s
-      retries: 120
-      start_period: 10s
     restart: unless-stopped
 
+  # Servicio de IA. Su entrypoint espera a /data/.ready antes de arrancar,
+  # asi que no necesita condicion de healthcheck para ordenarse tras django.
+  # Un solo worker: el limite de 20 peticiones al proveedor se aplica con un
+  # semaforo en proceso. Ver docs/DECISIONES.md, seccion 4.
   api:
     build: ./service_ai
     env_file: .env
@@ -26,10 +30,10 @@ services:
     ports:
       - "8001:8001"
     depends_on:
-      django:
-        condition: service_healthy
+      - django
     restart: unless-stopped
 
+  # Frontend estatico + proxy inverso hacia django y api (mismo origen, sin CORS).
   web:
     build: ./frontend
     ports:

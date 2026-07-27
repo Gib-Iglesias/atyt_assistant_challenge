@@ -1,14 +1,18 @@
-
+# Dependencias y artefactos: se instalan y construyen dentro de la imagen.
+# Copiarlos desde el host ademas de lento puede meter binarios compilados para
+# otra plataforma.
 node_modules
 dist
 .vite
 *.log
 npm-debug.log*
 
+# Nunca deben entrar en el contexto de build
 .env
 .env.*
 !.env.example
 
+# Ruido de desarrollo
 .git
 .gitignore
 .DS_Store

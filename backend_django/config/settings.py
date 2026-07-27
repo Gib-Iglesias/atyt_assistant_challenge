@@ -120,7 +120,7 @@ MEDIA_ROOT = Path(os.getenv("MEDIA_ROOT", "/data/media"))
 JWT_SECRET = os.getenv("JWT_SECRET", SECRET_KEY)
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 JWT_TTL_MINUTES = env_int("JWT_TTL_MINUTES", 60)
-JWT_ISSUER = os.getenv("JWT_ISSUER", "att-assistant-django")
+JWT_ISSUER = os.getenv("JWT_ISSUER", "atyt-assistant-django")
 
 # ------------------------------------------------------------------ ingesta
 CHUNK_SIZE_CHARS = env_int("CHUNK_SIZE_CHARS", 900)
